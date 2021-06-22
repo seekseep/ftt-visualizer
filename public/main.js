@@ -1,22 +1,20 @@
 AudioContext = window.AudioContext || window.webkitAudioContext
 
-function main () {
-  var ctx, analyser
+async function main () {
+  var canvas = document.querySelector("#canvas")
+  var ctx = ctx = canvas.getContext("2d")
 
-  function setup(stream) {
-    var canvas = document.querySelector("#canvas")
-    ctx = canvas.getContext("2d")
+  var audioCtx = new AudioContext()
+  var analyser = audioCtx.createAnalyser()
+  analyser.fftSize = 2048
 
-    var audioCtx = new AudioContext()
-    analyser = audioCtx.createAnalyser()
-    analyser.fftSize = 2048
+  var stream = await navigator.mediaDevices.getUserMedia({
+    audio: true,
+  })
 
-    var sourceNode = audioCtx.createMediaStreamSource(stream)
-    sourceNode.connect(analyser)
-    // analyser.connect(audioCtx.destination)
-
-    draw()
-  }
+  var sourceNode = audioCtx.createMediaStreamSource(stream)
+  sourceNode.connect(analyser)
+  // analyser.connect(audioCtx.destination)
 
   function draw() {
     var binCount = analyser.frequencyBinCount
@@ -53,11 +51,7 @@ function main () {
     requestAnimationFrame(draw)
   }
 
-  navigator.mediaDevices.getUserMedia({
-    audio: true,
-  }, setup, function (error) {
-    console.error(error)
-  })
+  draw()
 }
 
 main()
