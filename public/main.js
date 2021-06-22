@@ -1,4 +1,3 @@
-navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia
 AudioContext = window.AudioContext || window.webkitAudioContext
 
 function main () {
@@ -54,7 +53,7 @@ function main () {
     requestAnimationFrame(draw)
   }
 
-  navigator.getUserMedia({
+  navigator.mediaDevices.getUserMedia({
     audio: true,
   }, setup, function (error) {
     console.error(error)
